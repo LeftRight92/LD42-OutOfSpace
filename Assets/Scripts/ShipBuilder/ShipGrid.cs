@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LD42.Scripts.Configuration;
 using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
 	public class ShipGrid {
 		private Dictionary<ShipComponent, LocationInformation> locations;
-		private List<ShipComponent> components { get {
+		public List<ShipComponent> components { get {
 				return locations.Keys.ToList<ShipComponent>();
 			}
 		}
+		public event Action<ShipComponent, LocationInformation> OnComponentMove;
+		public event Action<ShipComponent> OnComponentDestroyed;
 
 		public ShipGrid() {
 			locations = new Dictionary<ShipComponent, LocationInformation>();
@@ -23,6 +26,10 @@ namespace LD42.Scripts.ShipBuilder {
 		public List<ShipComponent> GetAdjacentComponents(ShipComponent component) {
 			List<IntPair> adjacentTiles = GetAdjacentTiles(component);
 			return components.Where(i => GetOccupiedTiles(i).Intersect(adjacentTiles).Any()).ToList();
+		}
+
+		public Facing GetZone(ShipComponent component) {
+			return Facing.UP;
 		}
 
 		private List<IntPair> GetOccupiedTiles(ShipComponent component) {

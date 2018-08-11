@@ -10,6 +10,9 @@ namespace LD42.Scripts.ShipBuilder {
 		public IntPair[] shape;
 		public string identifier;
 		public int maxHealth;
-		public Sprite component, destroyedComponent;
+		public bool zoneBased;
+		public ComponentAdjacencyBonus[] adjacencyBonuses;
+		public ComponentProperty[] properties;
+		//public Sprite component, destroyedComponent;
 	}
 }
