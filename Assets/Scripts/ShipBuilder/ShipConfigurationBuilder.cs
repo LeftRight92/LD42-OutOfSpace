@@ -13,18 +13,31 @@ namespace LD42.Scripts.ShipBuilder {
 		[SerializeField]
 		private ShipGrid grid;
 
-		public ShipConfigurationBuilder(ShipGrid grid) {
+		[SerializeField]
+		private ShipConfigReader configReader;
+
+		public ShipConfigurationBuilder(ShipGrid grid, ShipConfigReader reader) {
 			this.grid = grid;
+			this.configReader = reader;
 			grid.OnComponentDestroyed += Grid_OnComponentDestroyed;
 			grid.OnComponentMove += Grid_OnComponentMove;
+			grid.OnDamageAndShield += Grid_OnDamageAndShield;
 		}
 
 		private void Grid_OnComponentMove(ShipComponent component, ShipGrid.LocationInformation location) {
-			BuildShipConfiguration();
+			DeployShipConfiguration(BuildShipConfiguration(), false);
 		}
 
 		private void Grid_OnComponentDestroyed(ShipComponent component) {
-			BuildShipConfiguration();
+			DeployShipConfiguration(BuildShipConfiguration(), false);
+		}
+
+		private void Grid_OnDamageAndShield() {
+			DeployShipConfiguration(BuildShipConfiguration(), true);
+		}
+
+		public void DeployShipConfiguration(Dictionary<string, int> config, bool armourOnly) {
+			configReader.UpdateConfig(config, armourOnly);
 		}
 
 		public Dictionary<string, int> BuildShipConfiguration() {
@@ -69,7 +82,7 @@ namespace LD42.Scripts.ShipBuilder {
 					if(bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
 						adjacencyBonuses.Add(new ComponentAdjacencyBonus(
 							bonus.componentIdentifier,
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetFacingString()),
+							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
 							bonus.amount));
 					} else {
 						adjacencyBonuses.Add(bonus);
@@ -88,7 +101,7 @@ namespace LD42.Scripts.ShipBuilder {
 				foreach (ComponentProperty bonus in component.Type.properties) {
 					if (bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
 						properties.Add(new ComponentProperty(
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetFacingString()),
+							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
 							bonus.amount));
 					} else {
 						properties.Add(bonus);

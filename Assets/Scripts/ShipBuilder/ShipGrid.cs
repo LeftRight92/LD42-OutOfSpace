@@ -14,6 +14,7 @@ namespace LD42.Scripts.ShipBuilder {
 		}
 		public event Action<ShipComponent, LocationInformation> OnComponentMove;
 		public event Action<ShipComponent> OnComponentDestroyed;
+		public event Action OnDamageAndShield;
 
 		public ShipGrid() {
 			locations = new Dictionary<ShipComponent, LocationInformation>();

@@ -5,29 +5,29 @@ using System.Text;
 
 namespace LD42.Scripts.Configuration {
 	public enum Facing {
-		[FacingString("up")]
+		[PropertyName("up")]
 		UP,
-		[FacingString("down")]
+		[PropertyName("down")]
 		DOWN,
-		[FacingString("left")]
+		[PropertyName("left")]
 		LEFT,
-		[FacingString("right")]
+		[PropertyName("right")]
 		RIGHT
 	}
 
-	public class FacingString : Attribute {
+	public class PropertyName : Attribute {
 		public string name;
 
-		internal FacingString(string name) {
+		internal PropertyName(string name) {
 			this.name = name;
 		}
 	}
 
 	public static class FacingExtensions {
-		public static string GetFacingString(this Facing facing) {
-			return ((FacingString)Attribute.GetCustomAttribute(
-				typeof(Facing).GetField(Enum.GetName(typeof(Facing), facing)),
-				typeof(FacingString))).name;
+		public static string GetPropertyString<T>(this T e) where T : struct, IConvertible {
+			return ((PropertyName)Attribute.GetCustomAttribute(
+				typeof(T).GetField(Enum.GetName(typeof(T), e)),
+				typeof(PropertyName))).name;
 		}
 	}
 }

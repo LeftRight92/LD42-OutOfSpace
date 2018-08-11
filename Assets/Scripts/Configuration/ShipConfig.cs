@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace LD42.Scripts.Configuration {
-	public abstract class ShipConfig {
+	public abstract class ShipConfig : MonoBehaviour {
 
-		public float speed { get; protected set; }
-		public Dictionary<Facing, ArmourConfig> armourConfig { get; protected set; }
-		public Dictionary<WeaponType, WeaponConfig> weapon { get; protected set; }
+		public abstract float Speed { get; }
+
+		public abstract ArmourConfig this[Facing facing] { get; }
+		public abstract WeaponConfig this[WeaponType type] { get; }
 
 		public abstract bool TakeDamage(Facing facing);
 	}
