@@ -11,6 +11,6 @@ namespace LD42.Scripts.Configuration {
 		public float rechargeTime { get; protected set; }
 		public int hullCurrent { get; protected set; }
 
-		public abstract void rechargeShield();
+		//public abstract void rechargeShield();
 	}
 }
