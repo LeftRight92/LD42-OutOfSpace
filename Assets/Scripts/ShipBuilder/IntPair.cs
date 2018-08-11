@@ -30,5 +30,17 @@ namespace LD42.Scripts.ShipBuilder {
 			IntPair o = (IntPair)obj;
 			return o.x == x && o.y == y;
 		}
+
+		public override int GetHashCode() {
+			return x.GetHashCode() + y.GetHashCode();
+		}
+
+		public override string ToString() {
+			return "(" + x + ", " + y + ")";
+		}
+
+		public static IntPair operator +(IntPair a, IntPair b) {
+			return new IntPair(a.x + b.x, a.y + b.y);
+		}
 	}
 }

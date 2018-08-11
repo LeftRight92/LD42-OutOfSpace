@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
 	public class ShipGrid {
@@ -11,6 +12,14 @@ namespace LD42.Scripts.ShipBuilder {
 			}
 		}
 
+		public ShipGrid() {
+			locations = new Dictionary<ShipComponent, LocationInformation>();
+		}
+
+		public void AddComponent(ShipComponent component, IntPair location) {
+			locations.Add(component, new LocationInformation(location, Rotation.UP));
+		}
+
 		public List<ShipComponent> GetAdjacentComponents(ShipComponent component) {
 			List<IntPair> adjacentTiles = GetAdjacentTiles(component);
 			return components.Where(i => GetOccupiedTiles(i).Intersect(adjacentTiles).Any()).ToList();
@@ -18,7 +27,7 @@ namespace LD42.Scripts.ShipBuilder {
 
 		private List<IntPair> GetOccupiedTiles(ShipComponent component) {
 			Rotation rotation = locations[component].rotation;
-			return component.Type.shape.Select(i => i.Rotate(rotation)).ToList<IntPair>();
+			return component.Type.shape.Select(i => i.Rotate(rotation) + locations[component].location).ToList<IntPair>();
 		}
 
 		private List<IntPair> GetAdjacentTiles(ShipComponent component) {
@@ -41,9 +50,14 @@ namespace LD42.Scripts.ShipBuilder {
 			};
 		}
 
-		public class LocationInformation {
+		public struct LocationInformation {
 			public IntPair location;
 			public Rotation rotation;
+
+			public LocationInformation(IntPair location, Rotation rotation) {
+				this.location = location;
+				this.rotation = rotation;
+			}
 		}
 	}
 }
