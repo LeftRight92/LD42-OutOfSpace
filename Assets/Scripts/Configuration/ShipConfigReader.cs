@@ -26,9 +26,9 @@ namespace LD42.Scripts.Configuration {
 		private WeaponConfig ReadWeaponConfig(WeaponType type) {
 			weaponConfigs.Add(type, new WeaponConfigImpl(
 				GetConfigPropertyOrZero(SubstitutePropertyString(WEAPON_AVAILABLE_PROPERTY, type)),
-				GetConfigPropertyOrOne(SubstitutePropertyString(WEAPON_QUANTITY_PROPERTY, type)),
-				GetConfigPropertyOrOne(SubstitutePropertyString(WEAPON_SIZE_PROPERTY, type)),
-				GetConfigPropertyOrOne(SubstitutePropertyString(WEAPON_DAMAGE_PROPERTY, type))
+				GetConfigPropertyOrZero(SubstitutePropertyString(WEAPON_QUANTITY_PROPERTY, type)),
+				GetConfigPropertyOrZero(SubstitutePropertyString(WEAPON_SIZE_PROPERTY, type)),
+				GetConfigPropertyOrZero(SubstitutePropertyString(WEAPON_DAMAGE_PROPERTY, type))
 			));
 			return weaponConfigs[type];
 		}
@@ -60,7 +60,7 @@ namespace LD42.Scripts.Configuration {
 			armourConfigs.Add(facing, new ArmourConfigImpl(
 				GetConfigPropertyOrZero(SubstitutePropertyString(SHIELD_CAP_PROPERTY, facing)),
 				GetConfigPropertyOrZero(SubstitutePropertyString(SHIELD_CUR_PROPERTY, facing)),
-				GetConfigPropertyOrZero(SubstitutePropertyString(SHIELD_REC_PROPERTY, facing)),
+				GetConfigPropertyOrOne(SubstitutePropertyString(SHIELD_REC_PROPERTY, facing)),
 				GetConfigPropertyOrZero(SubstitutePropertyString(HULL_PROPERTY, facing))
 			));
 			return armourConfigs[facing];

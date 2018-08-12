@@ -74,35 +74,26 @@ namespace LD42.Scripts.ShipBuilder {
 		}
 
 		private ComponentAdjacencyBonus[] ResolveLocationAdjacencies(ShipComponent component) {
-			if (component.Type.zoneBased) {
-				Facing facing = grid.GetZone(component);
-				List<ComponentAdjacencyBonus> adjacencyBonuses = new List<ComponentAdjacencyBonus>();
-				foreach(ComponentAdjacencyBonus bonus in component.Type.adjacencyBonuses) {
-					if(bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
-						adjacencyBonuses.Add(new ComponentAdjacencyBonus(
-							bonus.componentIdentifier,
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
-							bonus.amount));
-					} else {
-						adjacencyBonuses.Add(bonus);
-					}
+			Facing facing = grid.GetZone(component);
+			List<ComponentAdjacencyBonus> adjacencyBonuses = new List<ComponentAdjacencyBonus>();
+			foreach(ComponentAdjacencyBonus bonus in component.Type.adjacencyBonuses) {
+				if(bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
+					adjacencyBonuses.Add(new ComponentAdjacencyBonus(
+						bonus.componentIdentifier,
+						bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
+						bonus.amount));
+				} else {
+					adjacencyBonuses.Add(bonus);
 				}
-				return adjacencyBonuses.ToArray();
-			} else {
-				return component.Type.adjacencyBonuses;
 			}
+			return adjacencyBonuses.ToArray();
 		}
 
 		private ComponentProperty[] ResolveLocations(ShipComponent component) {
 			List<ComponentProperty> properties = new List<ComponentProperty>();
-			if (component.Type.zoneBased) {
-				Facing facing = grid.GetZone(component);
-				properties.AddRange(ResolveLocations(facing, component.Type.properties));
-				properties.AddRange(ResolveLocations(facing, component.Properties));
-			} else {
-				properties.AddRange(component.Type.properties);
-				properties.AddRange(component.Properties);
-			}
+			Facing facing = grid.GetZone(component);
+			properties.AddRange(ResolveLocations(facing, component.Type.properties));
+			properties.AddRange(ResolveLocations(facing, component.Properties));
 			return properties.ToArray();
 		}
 
