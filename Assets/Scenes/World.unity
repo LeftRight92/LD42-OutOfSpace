@@ -439,5 +439,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedHor: 5
   speedVert: 5
-  cannonFire: {fileID: 1184170138291330, guid: 6b6246a688f254bb89a697606936e5f0, type: 2}
-  cannonCooldown: 0.1
+  cannons: {fileID: 114502207995697338, guid: afad69b9741fe432caa2fef20806d00f, type: 2}
