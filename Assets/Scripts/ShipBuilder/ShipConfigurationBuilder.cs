@@ -6,38 +6,30 @@ using LD42.Scripts.Configuration;
 using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
-	public class ShipConfigurationBuilder {
-
-		private const string zoneBasedStringMarker = "zoned";
-
-		[SerializeField]
+	public class ShipConfigurationBuilder { 
+		private const string SHIP_PROPERTY_TAG = "ship";
+		private const string zoneBasedStringMarker = "%";
 		private ShipGrid grid;
 
-		[SerializeField]
-		private ShipConfigReader configReader;
+		public event Action<Dictionary<string, int>, bool> newConfigAvailable;
 
-		public ShipConfigurationBuilder(ShipGrid grid, ShipConfigReader reader) {
+		public ShipConfigurationBuilder(ShipGrid grid) {
 			this.grid = grid;
-			this.configReader = reader;
 			grid.OnComponentDestroyed += Grid_OnComponentDestroyed;
 			grid.OnComponentMove += Grid_OnComponentMove;
 			grid.OnDamageAndShield += Grid_OnDamageAndShield;
 		}
 
 		private void Grid_OnComponentMove(ShipComponent component, ShipGrid.LocationInformation location) {
-			DeployShipConfiguration(BuildShipConfiguration(), false);
+			newConfigAvailable(BuildShipConfiguration(), false);
 		}
 
 		private void Grid_OnComponentDestroyed(ShipComponent component) {
-			DeployShipConfiguration(BuildShipConfiguration(), false);
+			newConfigAvailable(BuildShipConfiguration(), false);
 		}
 
 		private void Grid_OnDamageAndShield() {
-			DeployShipConfiguration(BuildShipConfiguration(), true);
-		}
-
-		public void DeployShipConfiguration(Dictionary<string, int> config, bool armourOnly) {
-			configReader.UpdateConfig(config, armourOnly);
+			newConfigAvailable(BuildShipConfiguration(), true);
 		}
 
 		public Dictionary<string, int> BuildShipConfiguration() {
@@ -54,13 +46,11 @@ namespace LD42.Scripts.ShipBuilder {
 				);
 				Aggregate(shipConfig, ResolveLocations(component));
 			}
-
-			///
+#if DEBUG
 			String s = "";
 			foreach (KeyValuePair<string, int> pair in shipConfig) s = String.Concat(s, pair.Key, ": ", pair.Value, "\n");
 			Debug.Log(s);
-			////
-
+#endif
 			return shipConfig;
 		}
 
@@ -75,42 +65,41 @@ namespace LD42.Scripts.ShipBuilder {
 		}
 
 		private ComponentAdjacencyBonus[] ResolveLocationAdjacencies(ShipComponent component) {
-			if (component.Type.zoneBased) {
-				Facing facing = grid.GetZone(component);
-				List<ComponentAdjacencyBonus> adjacencyBonuses = new List<ComponentAdjacencyBonus>();
-				foreach(ComponentAdjacencyBonus bonus in component.Type.adjacencyBonuses) {
-					if(bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
-						adjacencyBonuses.Add(new ComponentAdjacencyBonus(
-							bonus.componentIdentifier,
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
-							bonus.amount));
-					} else {
-						adjacencyBonuses.Add(bonus);
-					}
+			Facing facing = grid.GetZone(component);
+			List<ComponentAdjacencyBonus> adjacencyBonuses = new List<ComponentAdjacencyBonus>();
+			foreach(ComponentAdjacencyBonus bonus in component.Type.adjacencyBonuses) {
+				if(bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
+					adjacencyBonuses.Add(new ComponentAdjacencyBonus(
+						bonus.componentIdentifier,
+						bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
+						bonus.amount));
+				} else {
+					adjacencyBonuses.Add(bonus);
 				}
-				return adjacencyBonuses.ToArray();
-			} else {
-				return component.Type.adjacencyBonuses;
 			}
+			return adjacencyBonuses.ToArray();
 		}
 
 		private ComponentProperty[] ResolveLocations(ShipComponent component) {
-			if (component.Type.zoneBased) {
-				Facing facing = grid.GetZone(component);
-				List<ComponentProperty> properties = new List<ComponentProperty>();
-				foreach (ComponentProperty bonus in component.Type.properties) {
-					if (bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
-						properties.Add(new ComponentProperty(
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
-							bonus.amount));
-					} else {
-						properties.Add(bonus);
-					}
+			List<ComponentProperty> properties = new List<ComponentProperty>();
+			Facing facing = grid.GetZone(component);
+			properties.AddRange(ResolveLocations(facing, component.Type.properties));
+			properties.AddRange(ResolveLocations(facing, component.Properties));
+			return properties.ToArray();
+		}
+
+		private List<ComponentProperty> ResolveLocations(Facing f, ComponentProperty[] components) {
+			List<ComponentProperty> properties = new List<ComponentProperty>();
+			foreach (ComponentProperty bonus in components) {
+				if (bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
+					properties.Add(new ComponentProperty(
+						bonus.propertyIdentifier.Replace(zoneBasedStringMarker, f.GetPropertyString()),
+						bonus.amount));
+				} else {
+					properties.Add(bonus);
 				}
-				return properties.ToArray();
-			} else {
-				return component.Type.properties;
 			}
+			return properties.ToList();
 		}
 	}
 }
