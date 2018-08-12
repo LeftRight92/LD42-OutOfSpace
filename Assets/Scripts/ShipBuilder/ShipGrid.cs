@@ -6,8 +6,12 @@ using LD42.Scripts.Configuration;
 using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
+	[Serializable]
 	public class ShipGrid {
-		private const int WIDTH = 9, HEIGHT = 7;
+		[SerializeField]
+		private int width = 9, height = 7, baySize = 3;
+		[SerializeField]
+		private IntPair entry = new IntPair(4, -2), exit = new IntPair(4, 8);
 
 		private readonly string[] DAMAGE_PRIORITY_QUEUE =  new string[] {
 			"component.systems.shield_large",
@@ -70,8 +74,8 @@ namespace LD42.Scripts.ShipBuilder {
 
 		public Facing GetZone(ShipComponent component) {
 			IntPair p = locations[component].location;
-			int mid = (int) Math.Floor(WIDTH / 2f);
-			bool upOrLeft = (p.x >= mid ? p.x - 1 : p.x) + p.y < HEIGHT;
+			int mid = (int) Math.Floor(width / 2f);
+			bool upOrLeft = (p.x >= mid ? p.x - 1 : p.x) + p.y < height;
 			if((p.x > mid ? p.x -1 : p.x) > p.y) {
 				return upOrLeft ? Facing.UP : Facing.RIGHT;
 			} else {

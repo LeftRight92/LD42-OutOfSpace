@@ -6,39 +6,30 @@ using LD42.Scripts.Configuration;
 using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
-	public class ShipConfigurationBuilder {
+	public class ShipConfigurationBuilder { 
 		private const string SHIP_PROPERTY_TAG = "ship";
-
 		private const string zoneBasedStringMarker = "%";
-
-		[SerializeField]
 		private ShipGrid grid;
 
-		[SerializeField]
-		private ShipConfigReader configReader;
+		public event Action<Dictionary<string, int>, bool> newConfigAvailable;
 
-		public ShipConfigurationBuilder(ShipGrid grid, ShipConfigReader reader) {
+		public ShipConfigurationBuilder(ShipGrid grid) {
 			this.grid = grid;
-			this.configReader = reader;
 			grid.OnComponentDestroyed += Grid_OnComponentDestroyed;
 			grid.OnComponentMove += Grid_OnComponentMove;
 			grid.OnDamageAndShield += Grid_OnDamageAndShield;
 		}
 
 		private void Grid_OnComponentMove(ShipComponent component, ShipGrid.LocationInformation location) {
-			DeployShipConfiguration(BuildShipConfiguration(), false);
+			newConfigAvailable(BuildShipConfiguration(), false);
 		}
 
 		private void Grid_OnComponentDestroyed(ShipComponent component) {
-			DeployShipConfiguration(BuildShipConfiguration(), false);
+			newConfigAvailable(BuildShipConfiguration(), false);
 		}
 
 		private void Grid_OnDamageAndShield() {
-			DeployShipConfiguration(BuildShipConfiguration(), true);
-		}
-
-		public void DeployShipConfiguration(Dictionary<string, int> config, bool armourOnly) {
-			configReader.UpdateConfig(config, armourOnly);
+			newConfigAvailable(BuildShipConfiguration(), true);
 		}
 
 		public Dictionary<string, int> BuildShipConfiguration() {

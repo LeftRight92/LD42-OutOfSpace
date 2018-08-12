@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LD42.Scripts.ShipBuilder;
 using UnityEngine;
 
 namespace LD42.Scripts.Configuration {
-	public class ShipConfigReader : ShipConfig {
+	public class ShipConfigReader {
 		private Dictionary<string, int> config;
+		private ShipConfigurationBuilder builder;
 
 		private Dictionary<WeaponType, WeaponConfig> weaponConfigs;
 		private Dictionary<Facing, ArmourConfig> armourConfigs;
 		private float? speed;
 
-		public override WeaponConfig this[WeaponType type] {
+		public event Action<bool> ShipConfigHasChanged;
+
+		public ShipConfigReader(ShipConfigurationBuilder builder) {
+			builder.newConfigAvailable += UpdateConfig;
+		}
+
+		public WeaponConfig this[WeaponType type] {
 			get {
 				if (weaponConfigs.ContainsKey(type)) return weaponConfigs[type];
 				return ReadWeaponConfig(type);
@@ -45,7 +53,7 @@ namespace LD42.Scripts.Configuration {
 			return config.ContainsKey(property) ? config[property] : 0;
 		}
 
-		public override ArmourConfig this[Facing facing] {
+		public ArmourConfig this[Facing facing] {
 			get {
 				if (armourConfigs.ContainsKey(facing)) return armourConfigs[facing];
 				return ReadArmourConfig(facing);
@@ -66,7 +74,7 @@ namespace LD42.Scripts.Configuration {
 			return armourConfigs[facing];
 		}
 
-		public override float Speed {
+		public float Speed {
 			get {
 				if (speed.HasValue) return speed.Value;
 				return ReadSpeed();
@@ -79,7 +87,7 @@ namespace LD42.Scripts.Configuration {
 			return speed.Value;
 		}
 
-		public override bool TakeDamage(Facing facing) {
+		public bool TakeDamage(Facing facing) {
 			throw new NotImplementedException();
 		}
 
@@ -108,7 +116,7 @@ namespace LD42.Scripts.Configuration {
 			}
 			Debug.Log(s);
 #endif
-			EventShipConfigHasChanged(armourOnly);
+			ShipConfigHasChanged(armourOnly);
 		}
 
 		public class ArmourConfigImpl : ArmourConfig {
