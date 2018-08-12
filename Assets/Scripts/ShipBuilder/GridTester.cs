@@ -15,9 +15,14 @@ namespace LD42.Scripts.ShipBuilder {
 		public void Start() {
 			grid = new ShipGrid();
 			grid.AddComponent(component1, new IntPair(0, 0));
-			reader = new ShipConfigReader();
 			builder = new ShipConfigurationBuilder(grid, reader);
 			builder.DeployShipConfiguration(builder.BuildShipConfiguration(), false);
+			Debug.Log("Pew");
+			grid.TakeDamage(Facing.LEFT);
+			Debug.Log("Pew");
+			grid.TakeDamage(Facing.LEFT);
+			Debug.Log("Pew");
+			grid.TakeDamage(Facing.LEFT);
 			//Debug.Log("Adjacent to Component 1: " + grid.GetAdjacentComponents(component1)[0].Type.identifier);
 		}
 

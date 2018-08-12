@@ -7,6 +7,14 @@ using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
 	public class ShipGrid {
+		private const int WIDTH = 9, HEIGHT = 7;
+
+		private readonly string[] DAMAGE_PRIORITY_QUEUE =  new string[] {
+			"component.systems.shield_large",
+			"component.systems.shield",
+			"component.systems.armour"
+		};
+
 		private Dictionary<ShipComponent, LocationInformation> locations;
 		public List<ShipComponent> components { get {
 				return locations.Keys.ToList<ShipComponent>();
@@ -15,6 +23,7 @@ namespace LD42.Scripts.ShipBuilder {
 		public event Action<ShipComponent, LocationInformation> OnComponentMove;
 		public event Action<ShipComponent> OnComponentDestroyed;
 		public event Action OnDamageAndShield;
+		public event Action OnDeath;
 
 		public ShipGrid() {
 			locations = new Dictionary<ShipComponent, LocationInformation>();
@@ -29,8 +38,45 @@ namespace LD42.Scripts.ShipBuilder {
 			return components.Where(i => GetOccupiedTiles(i).Intersect(adjacentTiles).Any()).ToList();
 		}
 
+		public void TakeDamage(Facing face) {
+			List<ShipComponent> componentsInZone = components.Where(component => component.health > 0 && GetZone(component) == face).ToList();
+			if (componentsInZone.Count == 0) {
+				Die();
+				return;
+			}
+			bool damageDone = false;
+			foreach(string typeName in DAMAGE_PRIORITY_QUEUE) {
+				List<ShipComponent> priorityComponents = componentsInZone.Where(component => component.Type.identifier == typeName).ToList();
+				if(priorityComponents.Count > 0) {
+					ReportDamage(priorityComponents[UnityEngine.Random.Range(0, priorityComponents.Count)].TakeDamage());
+					damageDone = true;
+					break;
+				}
+			}
+			if (!damageDone) {
+				ReportDamage(componentsInZone[UnityEngine.Random.Range(0, componentsInZone.Count)].TakeDamage());
+			}
+		}
+
+		public void ReportDamage(ShipComponent c) {
+			if(c == null) {
+				OnDamageAndShield();
+			} else {
+				OnComponentDestroyed(c);
+			}
+		}
+
+		public void Die() { Debug.Log("Oh no! We died!"); }
+
 		public Facing GetZone(ShipComponent component) {
-			return Facing.UP;
+			IntPair p = locations[component].location;
+			int mid = (int) Math.Floor(WIDTH / 2f);
+			bool upOrLeft = (p.x >= mid ? p.x - 1 : p.x) + p.y < HEIGHT;
+			if((p.x > mid ? p.x -1 : p.x) > p.y) {
+				return upOrLeft ? Facing.UP : Facing.RIGHT;
+			} else {
+				return upOrLeft ? Facing.LEFT : Facing.DOWN;
+			}
 		}
 
 		private List<IntPair> GetOccupiedTiles(ShipComponent component) {

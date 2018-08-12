@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace LD42.Scripts.ShipBuilder {
 	public class ShipConfigurationBuilder {
+		private const string SHIP_PROPERTY_TAG = "ship";
 
-		private const string zoneBasedStringMarker = "zoned";
+		private const string zoneBasedStringMarker = "%";
 
 		[SerializeField]
 		private ShipGrid grid;
@@ -54,13 +55,11 @@ namespace LD42.Scripts.ShipBuilder {
 				);
 				Aggregate(shipConfig, ResolveLocations(component));
 			}
-
-			///
+#if DEBUG
 			String s = "";
 			foreach (KeyValuePair<string, int> pair in shipConfig) s = String.Concat(s, pair.Key, ": ", pair.Value, "\n");
 			Debug.Log(s);
-			////
-
+#endif
 			return shipConfig;
 		}
 
@@ -95,22 +94,30 @@ namespace LD42.Scripts.ShipBuilder {
 		}
 
 		private ComponentProperty[] ResolveLocations(ShipComponent component) {
+			List<ComponentProperty> properties = new List<ComponentProperty>();
 			if (component.Type.zoneBased) {
 				Facing facing = grid.GetZone(component);
-				List<ComponentProperty> properties = new List<ComponentProperty>();
-				foreach (ComponentProperty bonus in component.Type.properties) {
-					if (bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
-						properties.Add(new ComponentProperty(
-							bonus.propertyIdentifier.Replace(zoneBasedStringMarker, facing.GetPropertyString()),
-							bonus.amount));
-					} else {
-						properties.Add(bonus);
-					}
-				}
-				return properties.ToArray();
+				properties.AddRange(ResolveLocations(facing, component.Type.properties));
+				properties.AddRange(ResolveLocations(facing, component.Properties));
 			} else {
-				return component.Type.properties;
+				properties.AddRange(component.Type.properties);
+				properties.AddRange(component.Properties);
 			}
+			return properties.ToArray();
+		}
+
+		private List<ComponentProperty> ResolveLocations(Facing f, ComponentProperty[] components) {
+			List<ComponentProperty> properties = new List<ComponentProperty>();
+			foreach (ComponentProperty bonus in components) {
+				if (bonus.propertyIdentifier.EndsWith(zoneBasedStringMarker)) {
+					properties.Add(new ComponentProperty(
+						bonus.propertyIdentifier.Replace(zoneBasedStringMarker, f.GetPropertyString()),
+						bonus.amount));
+				} else {
+					properties.Add(bonus);
+				}
+			}
+			return properties.ToList();
 		}
 	}
 }

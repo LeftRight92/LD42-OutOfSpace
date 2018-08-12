@@ -19,10 +19,10 @@ namespace LD42.Scripts.Configuration {
 			}
 		}
 
-		private const string WEAPON_AVAILABLE_PROPERTY = "ship.weapon.%.available";
-		private const string WEAPON_QUANTITY_PROPERTY = "ship.weapon.%.quantity";
-		private const string WEAPON_SIZE_PROPERTY = "ship.weapon.%.size";
-		private const string WEAPON_DAMAGE_PROPERTY = "ship.weapon.%.damage";
+		public const string WEAPON_AVAILABLE_PROPERTY = "ship.weapon.%.available";
+		public const string WEAPON_QUANTITY_PROPERTY = "ship.weapon.%.quantity";
+		public const string WEAPON_SIZE_PROPERTY = "ship.weapon.%.size";
+		public const string WEAPON_DAMAGE_PROPERTY = "ship.weapon.%.damage";
 		private WeaponConfig ReadWeaponConfig(WeaponType type) {
 			weaponConfigs.Add(type, new WeaponConfigImpl(
 				GetConfigPropertyOrZero(SubstitutePropertyString(WEAPON_AVAILABLE_PROPERTY, type)),
@@ -52,10 +52,10 @@ namespace LD42.Scripts.Configuration {
 			}
 		}
 
-		private const string HULL_PROPERTY = "ship.hull.%";
-		private const string SHIELD_CAP_PROPERTY = "ship.shield.capacity.%";
-		private const string SHIELD_CUR_PROPERTY = "ship.shield.current.%";
-		private const string SHIELD_REC_PROPERTY = "ship.shield.recharge.%";
+		public const string HULL_PROPERTY = "ship.hull.%";
+		public const string SHIELD_CAP_PROPERTY = "ship.shield.capacity.%";
+		public const string SHIELD_CUR_PROPERTY = "ship.shield.current.%";
+		public const string SHIELD_REC_PROPERTY = "ship.shield.recharge.%";
 		private ArmourConfig ReadArmourConfig(Facing facing) {
 			armourConfigs.Add(facing, new ArmourConfigImpl(
 				GetConfigPropertyOrZero(SubstitutePropertyString(SHIELD_CAP_PROPERTY, facing)),
@@ -73,7 +73,7 @@ namespace LD42.Scripts.Configuration {
 			}
 		}
 
-		private const string SPEED_PROPERTY = "ship.engines.speed";
+		public const string SPEED_PROPERTY = "ship.engines.speed";
 		private float ReadSpeed() {
 			speed = GetConfigPropertyOrOne(SPEED_PROPERTY);
 			return speed.Value;
@@ -86,24 +86,29 @@ namespace LD42.Scripts.Configuration {
 		public void UpdateConfig(Dictionary<string, int> newConfig, bool armourOnly) {
 			config = newConfig;
 			armourConfigs = new Dictionary<Facing, ArmourConfig>();
-			///
+#if DEBUG
 			string s = "";
 			foreach (Facing f in new Facing[]{ Facing.UP, Facing.DOWN, Facing.LEFT, Facing.RIGHT}) {
 				ArmourConfig a = this[f];
 				s += f.GetPropertyString().ToUpper() + " ARMOUR: hul: " + a.hullCurrent + " sMx: "
 					+ a.shieldMax + " sCu: " + a.shieldCurrent + " sRe: " + a.rechargeTime + "\n";
 			}
+#endif
 			if(!armourOnly) {
 				speed = null;
-				s += "SPEED: " + Speed + "\n";
 				weaponConfigs = new Dictionary<WeaponType, WeaponConfig>();
+#if DEBUG
+				s += "SPEED: " + Speed + "\n";
 				foreach (WeaponType t in new WeaponType[] { WeaponType.CANNON, WeaponType.BEAM, WeaponType.MISSILE, WeaponType.BOMB }) {
 					WeaponConfig w = this[t];
 					s += t.GetPropertyString().ToUpper() + " WEAPON: ava: " + w.available + " qnt: "
 						+ w.quantity + " siz: " + w.size + " dmg: " + w.damage + "\n";
 				}
+
 			}
 			Debug.Log(s);
+#endif
+			EventShipConfigHasChanged(armourOnly);
 		}
 
 		public class ArmourConfigImpl : ArmourConfig {
