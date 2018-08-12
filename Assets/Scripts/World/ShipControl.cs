@@ -2,38 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LD42.Scripts.Configuration;
-using LD42.Scripts.World;
+using LD42.Scripts.Weapons;
 
-public class ShipControl : MonoBehaviour {
-    public float speedHor = 5, speedVert = 5;
-    //public GameObject cannonFire;
-    //public float cannonCooldown = 0.05f;
-    public Weapon cannons;
-
+public class ShipControl : MonoBehaviour{
+	public float speedHor = 5, speedVert = 5;
+	public WeaponController cannonPrefab, beamPrefab, missilePrefab, bombPrefab;
+   
+	[SerializeField] private WeaponController cannon, beam, missile, bomb;   
     private SpriteRenderer renderer;
     private Rigidbody2D rigidbody;
     private BoxCollider2D collider;
     private Camera camera;
 
-    //private Vector3 relCannonPos;
-    private float cannonCountdown = 0;
-
     void Start () {
+		Physics2D.IgnoreLayerCollision(8, 8);
+
         renderer = gameObject.GetComponent<SpriteRenderer>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
         collider = gameObject.GetComponent<BoxCollider2D>();
         camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 
-        Vector3 relCannonPos = new Vector3(
-            renderer.bounds.size.x * 7.5f/32, 
-            renderer.bounds.size.y * 5.5f/32,
-            0
-        );
+		cannon = Instantiate(cannonPrefab, transform.position, Quaternion.identity);
+		cannon.transform.parent = transform;
 
-        //cannons = Weapon.New(gameObject, WeaponType.CANNON, Resources.Load<GameObject>("Prefabs/CannonFire"), 
-                             //new List<Vector3>{relCannonPos, new Vector3(-relCannonPos.x, relCannonPos.y, 0)},
-                             //simultaneousFire:false);
+		beam = Instantiate(beamPrefab, transform.position, Quaternion.identity);
+		beam.transform.parent = transform;
 
+		missile = Instantiate(missilePrefab, transform.position, Quaternion.identity);
+		missile.transform.parent = transform;
+
+        bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+        bomb.transform.parent = transform;
 	}
 	
 	void Update () {
@@ -43,7 +42,10 @@ public class ShipControl : MonoBehaviour {
         ));
 
         if(Input.GetButton("Fire1")){
-            cannons.AttemptFire();
+			cannon.AttemptToFire(gameObject);
+			beam.AttemptToFire(gameObject);
+            missile.AttemptToFire(gameObject);
+            bomb.AttemptToFire(gameObject);
         }
 	}
 }
