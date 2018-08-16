@@ -2,26 +2,19 @@
 
 public class SnapToPixelGrid : MonoBehaviour
 {
-    [SerializeField] public int pixelsPerUnit = 16;
-
-    private Transform parent;
+    [SerializeField] public int pixelsPerUnit = 270;
 
     private void Start()
     {
-        parent = transform.parent;
+		
     }
 
-    /// <summary>
-    /// Snap the object to the pixel grid determined by the given pixelsPerUnit.
-    /// Using the parent's world position, this moves to the nearest pixel grid location by 
-    /// offseting this GameObject by the difference between the parent position and pixel grid.
-    /// </summary>
     private void LateUpdate()
     {
         Vector3 newLocalPosition = Vector3.zero;
 
-        newLocalPosition.x = (Mathf.Round(parent.position.x * pixelsPerUnit) / pixelsPerUnit) - parent.position.x;
-        newLocalPosition.y = (Mathf.Round(parent.position.y * pixelsPerUnit) / pixelsPerUnit) - parent.position.y;
+		newLocalPosition.x = (Mathf.Round(transform.parent.position.x * pixelsPerUnit) / pixelsPerUnit) - transform.parent.position.x;
+		newLocalPosition.y = (Mathf.Round(transform.parent.position.y * pixelsPerUnit) / pixelsPerUnit) - transform.parent.position.y;
 
         transform.localPosition = newLocalPosition;
     }

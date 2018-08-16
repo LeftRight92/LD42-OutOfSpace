@@ -36,6 +36,10 @@ public class ShipControl : MonoBehaviour{
 	}
 	
 	void Update () {
+		int i = Mathf.RoundToInt(Random.value * 4);
+		gameObject.transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().sprite =
+			          Resources.Load<Sprite>("/Sprites/0.2/ShiftRunnerEngine" + i + ".png");
+
         rigidbody.AddForce(new Vector2(
             Input.GetAxis("Horizontal") * speedHor,
             Input.GetAxis("Vertical") * speedVert

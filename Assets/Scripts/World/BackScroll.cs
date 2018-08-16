@@ -15,7 +15,7 @@ public class BackScroll : MonoBehaviour {
 	}
 	
 	void Update () {
-        float offsetY = Mathf.Repeat(offset.y + Time.deltaTime*scrollSpeed, 1);
+        float offsetY = Mathf.Repeat(offset.y - Time.deltaTime*scrollSpeed, 1);
         offset = new Vector2(0, offsetY);
         renderer.material.mainTextureOffset = offset;
 	}

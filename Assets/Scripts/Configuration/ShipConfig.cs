@@ -19,5 +19,3 @@ namespace LD42.Scripts.Configuration {
 		public abstract void AddComponent();
 	}
 }
-
-
