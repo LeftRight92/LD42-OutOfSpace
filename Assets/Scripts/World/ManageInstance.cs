@@ -23,5 +23,13 @@ namespace LD42.Scripts.World
 
             GameObject.Destroy(gameObject);
 		}
+
+		public static Vector3 RoundXY(this Vector3 pos, float stepSize)
+        {
+            pos.x = Mathf.Round(pos.x / stepSize) * stepSize - pos.x;
+            pos.y = Mathf.Round(pos.y / stepSize) * stepSize - pos.y;
+            
+            return pos;
+        }
 	}
 }

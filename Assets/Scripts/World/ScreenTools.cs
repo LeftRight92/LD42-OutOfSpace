@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LD42.Scripts.World
 {
-	public class ScreenTools : MonoBehaviour
+	public static class ScreenTools
 	{
         private static Vector2? bottomLeft = null;
         private static Vector2? topRight = null;
@@ -34,10 +34,9 @@ namespace LD42.Scripts.World
 		}
 
 		public static Vector2 ScreenDims { get { return TopRight - BottomLeft; } }
-        
 		public static float Left { get { return bottomLeft.Value.x; } }
 		public static float Right { get { return topRight.Value.x; } }
 		public static float Top { get { return topRight.Value.y; } }
 		public static float Bottom { get { return bottomLeft.Value.y; } }
-	}
+	}   
 }

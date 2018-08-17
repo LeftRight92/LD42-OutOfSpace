@@ -21,21 +21,6 @@ namespace LD42.Scripts.Weapons
               
         private int selectedLoc = 0;
 		private float prevTime = 0;
-        
-        
-        //public static Weapon New(GameObject parent, WeaponType type, GameObject weaponFire, List<Vector3> fireLocations, 
-        //                         float cooldown = 0.05f, bool simultaneousFire = true)
-        //{
-        //    Weapon weapon = parent.AddComponent<Weapon>();
-
-        //    weapon.type = type;
-        //    weapon.weaponFire = weaponFire;
-        //    weapon.fireLocations = fireLocations;
-        //    weapon.cooldown = cooldown;
-        //    weapon.simultaneousFire = simultaneousFire;
-
-        //    return weapon;
-        //}
 
         public void AttemptToFire(GameObject spawner)
         {
@@ -100,13 +85,13 @@ namespace LD42.Scripts.Weapons
             float firedOffset = 0;         
 			if(type == WeaponType.BEAM || type == WeaponType.CANNON){
 				firedOffset = 
-					spawner.transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.extents.y;
+					projectile.transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.extents.y;
 			}
 
             projectile.transform.position =
                 Vector3.Scale(spawner.transform.position, Vector2.one) +
-                spawner.transform.rotation *
-                Vector3.Scale(location, spawnerBounds) +
+                spawner.transform.rotation * location +
+                //Vector3.Scale(location, spawnerBounds) +
                 new Vector3(0, firedOffset, 0);
 
 			projectile.transform.rotation = spawner.transform.rotation *
@@ -121,8 +106,8 @@ namespace LD42.Scripts.Weapons
                 projectile.tag = "EnemyFire";
             }
 
-            Physics2D.IgnoreCollision(spawner.GetComponent<BoxCollider2D>(), 
-			                          projectile.GetComponent<BoxCollider2D>());
+            //Physics2D.IgnoreCollision(spawner.GetComponent<BoxCollider2D>(), 
+			                          //projectile.GetComponent<BoxCollider2D>());
             projectile.transform.parent = gameObject.transform;
         }
     }

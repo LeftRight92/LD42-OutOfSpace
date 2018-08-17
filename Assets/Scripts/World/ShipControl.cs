@@ -14,8 +14,10 @@ public class ShipControl : MonoBehaviour{
     private BoxCollider2D collider;
     private Camera camera;
 
-    void Start () {
-		Physics2D.IgnoreLayerCollision(8, 8);
+	void Start () {
+        Physics2D.IgnoreLayerCollision(8, 10);
+		Physics2D.IgnoreLayerCollision(9, 10);
+        Physics2D.IgnoreLayerCollision(10, 10);
 
         renderer = gameObject.GetComponent<SpriteRenderer>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();

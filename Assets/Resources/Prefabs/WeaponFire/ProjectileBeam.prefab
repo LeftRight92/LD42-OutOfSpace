@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4676702691080424}
   - component: {fileID: 212770822227822978}
   - component: {fileID: 114955074379107132}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Laser Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4023021361973038}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Laser Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4747836770408648}
   - component: {fileID: 61018652587938040}
   - component: {fileID: 114459516938911570}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: ProjectileBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4603823237287884}
   - component: {fileID: 212370149359131438}
   - component: {fileID: 114319152307337078}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Laser Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1314130839287132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4676702691080424}
@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 1266996872050180}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.1}
-  m_LocalScale: {x: 1, y: 10, z: 1}
+  m_LocalScale: {x: 1, y: 16, z: 1}
   m_Children: []
   m_Father: {fileID: 4023021361973038}
   m_RootOrder: 0
@@ -139,12 +139,12 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1770961972184812}
   m_Enabled: 1
-  m_Density: 1
+  m_Density: 0.01
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 512}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -155,7 +155,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.24, y: 0.64}
+  m_Size: {x: 12, y: 1088}
   m_EdgeRadius: 0
 --- !u!114 &114319152307337078
 MonoBehaviour:
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1247b97a8754949ae859d5c9f6661d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelsPerUnit: 540
+  pixelsPerUnit: 1
 --- !u!114 &114459516938911570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1247b97a8754949ae859d5c9f6661d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelsPerUnit: 540
+  pixelsPerUnit: 1
 --- !u!212 &212370149359131438
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -18,10 +18,12 @@ namespace LD42.Scripts.Weapons
 		}
 
 		void Update(){
-			transform.position = Vector3.Lerp(transform.position, 
-			                                  transform.position + 
-			                                  gameObject.transform.up, 
-			                                  speed * Time.deltaTime);
+			
+			transform.position = Vector3.LerpUnclamped(
+				transform.position, 
+				transform.position + gameObject.transform.up, 
+				speed * Time.deltaTime
+			);
 			
 			if(gameObject.CheckOffScreen()){
 				gameObject.FullDestroy();
