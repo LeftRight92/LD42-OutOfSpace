@@ -7,21 +7,25 @@ namespace LD42.Scripts.World
 {
     public class ScreenCollider : MonoBehaviour
     {
+		public Camera mainCamera;
+
         void Start()
         {
-            Camera camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-			camera.gameObject.AddComponent<EdgeCollider2D>();
+			mainCamera = GameObject.Find("WorldParameters").
+			                       GetComponent<WorldParameters>().
+								   mainCamera;
+			mainCamera.gameObject.AddComponent<EdgeCollider2D>();
 
-            UpdateCollider(camera);
+            UpdateCollider();
         }
 
-        public static void UpdateCollider(Camera camera)
+        public void UpdateCollider()
         {
             Vector2 bottomLeft = ScreenTools.BottomLeft;
 			Vector2 topRight = ScreenTools.TopRight;
             Vector2 dimensions = topRight - bottomLeft;
 
-            EdgeCollider2D collider = camera.gameObject.GetComponent<EdgeCollider2D>();
+            EdgeCollider2D collider = mainCamera.gameObject.GetComponent<EdgeCollider2D>();
             collider.points = new Vector2[]{
 				new Vector2(ScreenTools.Left, ScreenTools.Bottom),
 				new Vector2(ScreenTools.Left, ScreenTools.Top),

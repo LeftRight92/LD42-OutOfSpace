@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LD42.Scripts.Utility;
 using LD42.Scripts.Configuration;
 using LD42.Scripts.Weapons;
+using LD42.Scripts.World;
 
-public class ShipControl : MonoBehaviour{
-	public float speedHor = 5, speedVert = 5;
-	public WeaponController cannonPrefab, beamPrefab, missilePrefab, bombPrefab;
+public class ShipControl : MonoBehaviour {
+	[SerializeField] public float speedHor = 5, speedVert = 5;
+	[SerializeField] public WeaponController cannonPrefab, beamPrefab, missilePrefab, bombPrefab;
    
 	[SerializeField] private WeaponController cannon, beam, missile, bomb;   
     private SpriteRenderer renderer;
     private Rigidbody2D rigidbody;
     private BoxCollider2D collider;
-    private Camera camera;
+	//private Camera mainCamera;
 
 	void Start () {
         Physics2D.IgnoreLayerCollision(8, 10);
@@ -22,11 +24,14 @@ public class ShipControl : MonoBehaviour{
         renderer = gameObject.GetComponent<SpriteRenderer>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
         collider = gameObject.GetComponent<BoxCollider2D>();
-        camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+		//mainCamera = GameObject.Find("WorldParameters").
+		                       //GetComponent<WorldParameters>().
+		                       //mainCamera;
+
 
 		cannon = Instantiate(cannonPrefab, transform.position, Quaternion.identity);
 		cannon.transform.parent = transform;
-
+        
 		beam = Instantiate(beamPrefab, transform.position, Quaternion.identity);
 		beam.transform.parent = transform;
 
@@ -37,10 +42,10 @@ public class ShipControl : MonoBehaviour{
         bomb.transform.parent = transform;
 	}
 	
-	void Update () {
-		int i = Mathf.RoundToInt(Random.value * 4);
-		gameObject.transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().sprite =
-			          Resources.Load<Sprite>("/Sprites/0.2/ShiftRunnerEngine" + i + ".png");
+	void FixedUpdate() {
+		//int i = Mathf.RoundToInt(Random.value * 4);
+		//gameObject.transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().sprite =
+			          //Resources.Load<Sprite>("/Sprites/0.2/ShiftRunnerEngine" + i + ".png");
 
         rigidbody.AddForce(new Vector2(
             Input.GetAxis("Horizontal") * speedHor,

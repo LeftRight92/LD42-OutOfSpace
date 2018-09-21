@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LD42.Scripts.Utility;
 using LD42.Scripts.World;
 
 namespace LD42.Scripts.World
@@ -17,11 +18,12 @@ namespace LD42.Scripts.World
 		}
 
 		public static void FullDestroy(this GameObject gameObject){
-			List<GameObject> children = new List<GameObject>();
-            foreach (Transform child in gameObject.transform) children.Add(child.gameObject);
-            children.ForEach(FullDestroy);
+			//List<GameObject> children = new List<GameObject>();
+   //         foreach (Transform child in gameObject.transform) children.Add(child.gameObject);
 
-            GameObject.Destroy(gameObject);
+			//children.ForEach(FullDestroy);
+
+            gameObject.Call(GameObject.Destroy);
 		}
 
 		public static Vector3 RoundXY(this Vector3 pos, float stepSize)

@@ -7,7 +7,8 @@ namespace LD42.Scripts.Weapons
 {
 	public class ControllerCannon : MonoBehaviour
 	{
-		public float speed = 5;
+        [SerializeField] public WorldParameters parameters;
+		[SerializeField] public float speed = 5;
 
 		void Start(){
 			GameObject weapon = transform.parent.gameObject;
@@ -16,9 +17,10 @@ namespace LD42.Scripts.Weapons
             
 			//velocity = spawner.GetComponent<Rigidbody2D>().velocity;
 		}
-
+        
 		void Update(){
-			
+			parameters = GetComponentInParent<WorldParameters>();
+
 			transform.position = Vector3.LerpUnclamped(
 				transform.position, 
 				transform.position + gameObject.transform.up, 

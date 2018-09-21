@@ -1,21 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LD42.Scripts.Utility;
+using LD42.Scripts.World;
 
 namespace LD42.Scripts.World
 {
 	public static class ScreenTools
 	{
-        private static Vector2? bottomLeft = null;
-        private static Vector2? topRight = null;
+        private static Vector2? bottomLeft;
+        private static Vector2? topRight;
         private static Vector2 screenDims;
 
 		public static Vector2 BottomLeft{
 			get
             {
 				if(bottomLeft == null)
-					bottomLeft = GameObject.FindWithTag("MainCamera").
-					                       GetComponent<Camera>().
+					bottomLeft = GameObject.Find("WorldParameters").
+					                       GetComponent<WorldParameters>().
+                                           mainCamera.
 					                       ViewportToWorldPoint(Vector2.zero);            
 				return bottomLeft.Value;
             }
@@ -26,8 +29,9 @@ namespace LD42.Scripts.World
             get
             {
                 if (topRight == null)
-					topRight = GameObject.FindWithTag("MainCamera").
-                                           GetComponent<Camera>().
+					topRight = GameObject.Find("WorldParameters").
+                                           GetComponent<WorldParameters>().
+                                           mainCamera.
                                            ViewportToWorldPoint(Vector2.one);
                 return topRight.Value;
             }

@@ -16,7 +16,6 @@ public class WeaponEditor : Editor
     WeaponController weaponTarget;
     SerializedObject weaponSerialized;
 
-
 	SerializedProperty type;
 	SerializedProperty weaponFire;
 	SerializedProperty cooldown;

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  weaponFire: {fileID: 1770961972184812, guid: d7ba7b112c91c4046862c9cd4fad902f, type: 2}
+  weaponFire: {fileID: 1196608712473220, guid: d7ba7b112c91c4046862c9cd4fad902f, type: 2}
   cooldown: 10
   simultaneousFire: 1
   available: 1
@@ -60,4 +60,4 @@ MonoBehaviour:
   size: 1
   damage: 1
   fireLocations:
-  - {x: 0, y: 30, z: 0}
+  - {x: 0, y: 15, z: 0}

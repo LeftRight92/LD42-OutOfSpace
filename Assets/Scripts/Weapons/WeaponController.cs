@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LD42.Scripts.Configuration;
+using LD42.Scripts.World;
 
 namespace LD42.Scripts.Weapons
 {
     public class WeaponController : MonoBehaviour
-    {
-		public WeaponType type;
-        public GameObject weaponFire;
-        public float cooldown = 0.5f;
-        public bool simultaneousFire = true;
+	{
+		[SerializeField] public WeaponType type;
+		[SerializeField] public GameObject weaponFire;
+		[SerializeField] public float cooldown = 0.5f;
+		[SerializeField] public bool simultaneousFire = true;
 
 		[SerializeField] private bool available = true;
 		[SerializeField] private int quantity = 1;
