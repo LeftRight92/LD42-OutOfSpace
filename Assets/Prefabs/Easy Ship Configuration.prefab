@@ -54,7 +54,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   component1: {fileID: 114501365020071826}
-  reader: {fileID: 114456574830084666}
+  grid:
+    width: 9
+    height: 7
+    baySize: 3
+    entry:
+      x: 4
+      y: -2
+    exit:
+      x: 4
+      y: 8
 --- !u!114 &114456574830084666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -77,13 +86,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a0575b641e4e8499fd0bc29902d554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  properties: []
+  damageBeforeHealth: []
   type:
     shape:
     - x: 1
       y: 1
     identifier: component.test
     maxHealth: 3
-    zoneBased: 0
     adjacencyBonuses: []
     properties:
     - propertyIdentifier: ship.weapon.cannon.available

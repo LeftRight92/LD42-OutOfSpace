@@ -10,6 +10,12 @@ namespace LD42.Scripts.Utility
 		public static T CastTo<T>(this object t)
         {
             return (T)t;
+		}
+
+        public static IList<T> AddTo<T>(this T t, IList<T> ts)
+        {
+            ts[ts.Count] = t;
+            return ts;
         }
 
 		public static Vector2 NewVec(this float f1, float f2, bool flip = false)

@@ -6,57 +6,45 @@ using LD42.Scripts.Configuration;
 using LD42.Scripts.Weapons;
 using LD42.Scripts.World;
 
-public class ShipControl : MonoBehaviour {
+public class ShipControl : MonoBehaviour {    
 	[SerializeField] public float speedHor = 5, speedVert = 5;
-	[SerializeField] public WeaponController cannonPrefab, beamPrefab, missilePrefab, bombPrefab;
+	//[SerializeField] public WeaponController cannonPrefab, beamPrefab, missilePrefab, bombPrefab;
+	[SerializeField] public Sprite[] engineTails = new Sprite[4];
    
-	[SerializeField] private WeaponController cannon, beam, missile, bomb;   
+	//[SerializeField] private WeaponController cannon, beam, missile, bomb;   
     private SpriteRenderer renderer;
     private Rigidbody2D rigidbody;
     private BoxCollider2D collider;
 	//private Camera mainCamera;
 
-	void Start () {
-        Physics2D.IgnoreLayerCollision(8, 10);
-		Physics2D.IgnoreLayerCollision(9, 10);
-        Physics2D.IgnoreLayerCollision(10, 10);
+	private WeaponsControl weapons;
 
-        renderer = gameObject.GetComponent<SpriteRenderer>();
+	void Start () {
+		renderer = gameObject.GetComponent<SpriteRenderer>();
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
         collider = gameObject.GetComponent<BoxCollider2D>();
-		//mainCamera = GameObject.Find("WorldParameters").
-		                       //GetComponent<WorldParameters>().
-		                       //mainCamera;
 
+		weapons = gameObject.GetComponent<WeaponsControl>();
 
-		cannon = Instantiate(cannonPrefab, transform.position, Quaternion.identity);
-		cannon.transform.parent = transform;
-        
-		beam = Instantiate(beamPrefab, transform.position, Quaternion.identity);
-		beam.transform.parent = transform;
+		WorldManager worldManager = GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>();
+		worldManager.update += _Update;
+	}
 
-		missile = Instantiate(missilePrefab, transform.position, Quaternion.identity);
-		missile.transform.parent = transform;
-
-        bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
-        bomb.transform.parent = transform;
+	void _Update(){
+        int i = Mathf.FloorToInt(Random.value * 4);
+        gameObject.transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().sprite =
+			          engineTails[i];
 	}
 	
-	void FixedUpdate() {
-		//int i = Mathf.RoundToInt(Random.value * 4);
-		//gameObject.transform.GetChild(1).GetChild(0).GetComponent<SpriteRenderer>().sprite =
-			          //Resources.Load<Sprite>("/Sprites/0.2/ShiftRunnerEngine" + i + ".png");
-
+	void FixedUpdate(){      
         rigidbody.AddForce(new Vector2(
             Input.GetAxis("Horizontal") * speedHor,
             Input.GetAxis("Vertical") * speedVert
         ));
 
         if(Input.GetButton("Fire1")){
-			cannon.AttemptToFire(gameObject);
-			beam.AttemptToFire(gameObject);
-            missile.AttemptToFire(gameObject);
-            bomb.AttemptToFire(gameObject);
+			weapons.AttempToFire(WeaponType.CANNON);
+            weapons.AttempToFire(WeaponType.BEAM);
         }
 	}
 }

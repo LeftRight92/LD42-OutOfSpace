@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LD42.Scripts.World;
+using LD42.Scripts.Utility;
 
 namespace LD42.Scripts.Weapons
 {
@@ -12,17 +13,20 @@ namespace LD42.Scripts.Weapons
 		void Start(){
 			GameObject weapon = transform.parent.gameObject;
 			GameObject spawner = weapon.transform.parent.gameObject;
-			//transform.parent = null;
 
-			//velocity = spawner.GetComponent<Rigidbody2D>().velocity;
+            GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>().update += _Update;
 		}
 
-		void Update(){
-			if (duration <= 0)
-			{
-				gameObject.FullDestroy();
-			}
+		void _Update(){
+			if (duration <= 0) _Destroy();
+
 			duration -= Time.deltaTime;
 		}
+
+        void _Destroy()
+        {
+            GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>().update -= _Update;         
+            gameObject.Call(Destroy);
+        }
 	}
 }

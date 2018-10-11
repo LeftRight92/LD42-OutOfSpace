@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 69462532}
   - component: {fileID: 69462531}
   - component: {fileID: 69462530}
+  - component: {fileID: 69462534}
   - component: {fileID: 69462533}
   m_Layer: 9
   m_Name: Main Camera
@@ -173,7 +174,7 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 0
-  m_AllowDynamicResolution: 0
+  m_AllowDynamicResolution: 1
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
@@ -202,7 +203,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95bcf7318a5c342139587ace15945f06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
+--- !u!68 &69462534
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 69462529}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points: []
 --- !u!1 &115008421
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,9 +490,10 @@ GameObject:
   m_Component:
   - component: {fileID: 494588142}
   - component: {fileID: 494588145}
+  - component: {fileID: 494588141}
   - component: {fileID: 494588144}
   - component: {fileID: 494588143}
-  - component: {fileID: 494588141}
+  - component: {fileID: 494588146}
   m_Layer: 8
   m_Name: Ship
   m_TagString: Player
@@ -493,10 +509,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 494588140}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cd9b5571129b4c59bacaaea014895e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e12e5eff03e44fb984994a027aa069a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
+  weapons:
+  - weapon: {fileID: 114846025074886618, guid: 40c21d14de3d24b1686580cd9c8f5845, type: 2}
+    location: {x: 7.5, y: 8, z: 0}
+  - weapon: {fileID: 114846025074886618, guid: 40c21d14de3d24b1686580cd9c8f5845, type: 2}
+    location: {x: -7.5, y: 8, z: 0}
+  - weapon: {fileID: 114027866403730966, guid: 72eb40cb7d3c44c9b8c89d6f8496a037, type: 2}
+    location: {x: 0, y: 15, z: 0}
 --- !u!4 &494588142
 Transform:
   m_ObjectHideFlags: 0
@@ -518,7 +540,7 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 494588140}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 0.001
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -535,7 +557,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 64, y: 64}
+  m_Size: {x: 24, y: 30}
   m_EdgeRadius: 0
 --- !u!50 &494588144
 Rigidbody2D:
@@ -548,7 +570,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 4.096
+  m_Mass: 3.3275
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -568,20 +590,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00efa3b44949241a3b192f49e7ba7f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedHor: 1000
-  speedVert: 1000
-  cannonPrefab: {fileID: 114502207995697338, guid: afad69b9741fe432caa2fef20806d00f,
-    type: 2}
-  beamPrefab: {fileID: 114455141557362516, guid: 6a34613943a6e40beb35bf5163a49e76,
-    type: 2}
-  missilePrefab: {fileID: 114998773624719864, guid: 7ab989018bdc64008aa340aeab1d3428,
-    type: 2}
-  bombPrefab: {fileID: 114344132419242616, guid: e5f60feb0413d4156ab03e7fa41ccb64,
-    type: 2}
-  cannon: {fileID: 0}
-  beam: {fileID: 0}
-  missile: {fileID: 0}
-  bomb: {fileID: 0}
+  speedHor: 2000
+  speedVert: 2000
+  engineTails:
+  - {fileID: 21300000, guid: 830e29bd9075445b7a9eb87cd1486b84, type: 3}
+  - {fileID: 21300000, guid: 2557db38477634f9e9d905d09166d537, type: 3}
+  - {fileID: 21300000, guid: 8dedf94cf8dc74ec2b6990c3ef97ce66, type: 3}
+  - {fileID: 21300000, guid: b4bd7bb1db3a94b7095d0a23bb714a65, type: 3}
+--- !u!60 &494588146
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 494588140}
+  m_Enabled: 1
+  m_Density: 0.01
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -2, y: 13}
+      - {x: -3, y: 3}
+      - {x: -11, y: 2}
+      - {x: -11, y: -13}
+      - {x: -6, y: -13}
+      - {x: -6, y: -8}
+      - {x: 0, y: -8}
+      - {x: 6, y: -8}
+      - {x: 6.5, y: -13}
+      - {x: 11, y: -13}
+      - {x: 11, y: 2}
+      - {x: 3, y: 3}
+      - {x: 2, y: 13}
 --- !u!1 &912456598
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +644,7 @@ GameObject:
   - component: {fileID: 912456600}
   - component: {fileID: 912456599}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Ship Config
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -671,8 +723,8 @@ GameObject:
   - component: {fileID: 1419571808}
   - component: {fileID: 1419571807}
   m_Layer: 0
-  m_Name: WorldParameters
-  m_TagString: Untagged
+  m_Name: World Manager
+  m_TagString: WorldManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -685,10 +737,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1419571806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cd9b5571129b4c59bacaaea014895e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 50acf0690a6674e1da8e66d405e12feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 69462531}
+  cameraSize: 270
+  worldScale: 1
 --- !u!4 &1419571808
 Transform:
   m_ObjectHideFlags: 0

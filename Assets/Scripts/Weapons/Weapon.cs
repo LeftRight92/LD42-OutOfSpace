@@ -2,53 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LD42.Scripts.Configuration;
+using LD42.Scripts.Utility;
 
-public class Weapon : MonoBehaviour {
-    [SerializeField] public WeaponType type;
-    [SerializeField] public GameObject weaponFire;
-	[SerializeField] public float cooldown = 0.5f;
-	[SerializeField] public Vector3 location;
+namespace LD42.Scripts.Weapons
+{
+	[System.Serializable]
+	public class Weapon : MonoBehaviour
+	{
+		[SerializeField] public GameObject weaponFire;
+		[SerializeField, HideInInspector] public WeaponType type;
+		[SerializeField] public float cooldown = 0.5f;
+		//[SerializeField] public Vector3 location;
 
-	[SerializeField] private bool available = true;
-    [SerializeField] private int quantity = 1;
-    [SerializeField] private int size = 1;
-    [SerializeField] private int damage = 1;
-    
-	private float prevTime = 0;
+		[SerializeField] private bool available = true;
+		[SerializeField] private int quantity = 1;
+		[SerializeField] private int size = 1;
+		[SerializeField] private int damage = 1;
 
-	public bool AttemptToFire(GameObject spawner)
-    {
-        if (Time.time - prevTime >= cooldown)
-        {
-			Fire(spawner);
-            prevTime = Time.time;
-			return true;
-        }
-		else
+		private float prevTime = float.NegativeInfinity;
+
+		public void Start()
 		{
-            return false;
+			//if(weaponFire.GetComponent<ControllerCannon>()) type=WeaponType.CANNON;
+			//if(weaponFire.GetComponent<ControllerBeam>()) type=WeaponType.BEAM;
+            
+			type = weaponFire.GetComponent<ControllerCannon>() ? WeaponType.CANNON : 
+			          weaponFire.GetComponent<ControllerBeam>() ? WeaponType.BEAM : WeaponType.CANNON;
+	}
+
+		public bool AttemptToFire(GameObject spawner)
+		{
+			if (Time.time - prevTime >= cooldown)
+			{
+				Fire(spawner);
+				prevTime = Time.time;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
-    }
 
-	private void Fire(GameObject spawner){
-		GameObject projectile = Instantiate(weaponFire);
+		private void Fire(GameObject spawner)
+		{
+			GameObject projectile = Instantiate(weaponFire, transform);
 
-		projectile.transform.position =
-			          Vector3.Scale(spawner.transform.position, Vector2.one) +
-					  spawner.transform.rotation * location;
+			//if (spawner.transform.root.gameObject.tag == "Player")
+			//      {
+			//          projectile.layer = 10;
+			//      }
+			//      else
+			//{
+			//          projectile.layer = 11;
+			//}
 
-		projectile.transform.rotation = spawner.transform.rotation; //*
-                //Quaternion.AngleAxis(direction, Vector3.back);
+			projectile.layer = (spawner.transform.root.gameObject.tag == "Player") ? 10 : 11;
 
-		if (spawner == GameObject.FindWithTag("Player"))
-        {
-            projectile.tag = "PlayerFire";
-        }
-        else
-        {
-            projectile.tag = "EnemyFire";
-        }
-
-        projectile.transform.parent = gameObject.transform;
+			projectile.transform.parent = gameObject.transform;
+		}
 	}
 }

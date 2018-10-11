@@ -3,9 +3,13 @@ using LD42.Scripts.World;
 
 public class SnapToPixelGrid : MonoBehaviour
 {
-	[SerializeField] public float scale = 0.5f;
+	[SerializeField] public float step = 0.5f;
+
+	//void Start(){
+	//	step = step * GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>().worldScale;
+	//}
 
     void LateUpdate(){      
-		transform.localPosition = transform.parent.position.RoundXY(scale);      
+		transform.localPosition = transform.parent.position.RoundXY(step);      
     }   
 }

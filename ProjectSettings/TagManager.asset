@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerFire
   - EnemyFire
+  - WorldManager
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - 
   - Player
   - Bounding Box
-  - Weapon Fire
-  - 
-  - 
+  - Player Fire
+  - Enemy Fire
+  - Enemy Ship
   - 
   - 
   - 

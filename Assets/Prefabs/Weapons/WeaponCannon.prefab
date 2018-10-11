@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1227409070986392}
+  m_RootGameObject: {fileID: 1322825505484442}
   m_IsPrefabAsset: 1
---- !u!1 &1227409070986392
+--- !u!1 &1322825505484442
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4761433212862618}
-  - component: {fileID: 114998773624719864}
+  - component: {fileID: 4404972664540304}
+  - component: {fileID: 114846025074886618}
   m_Layer: 0
-  m_Name: WeaponMissile
+  m_Name: WeaponCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4761433212862618
+--- !u!4 &4404972664540304
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1227409070986392}
+  m_GameObject: {fileID: 1322825505484442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,25 +40,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114998773624719864
+--- !u!114 &114846025074886618
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1227409070986392}
+  m_GameObject: {fileID: 1322825505484442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2551effe4cfa943eea78cd5456bc8df5, type: 3}
+  m_Script: {fileID: 11500000, guid: 87c1ac95fe1ef4de4b8cfab9be23ff0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  weaponFire: {fileID: 1945187847825150, guid: 00410f160d4df4a0cae06fc5c2a7080d, type: 2}
-  cooldown: 7.5
-  simultaneousFire: 1
-  turnwise: 0
+  weaponFire: {fileID: 1184170138291330, guid: 802ab65441f284837830d148c2f2d54a, type: 2}
+  cooldown: 0.2
   available: 1
   quantity: 1
   size: 1
   damage: 1
-  fireLocations:
-  - {x: 0, y: 0, z: 0}
